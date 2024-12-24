@@ -9,7 +9,7 @@
 void fcreate(char *fileName) {
     int fd = creat(fileName, 0644);
     if (fd < 0) {
-        perror("Error creating file");
+        perror("Error creating '%s' file", fileName);
     } else {
         printf("File '%s' created successfully.\n", fileName);
         close(fd);
@@ -44,7 +44,7 @@ void fcopy(char *srcFile, char *destFile) {
     }
 
     while ((bytesRead = read(srcFd, buffer, sizeof(buffer))) > 0) {
-        if (write(destFd, buffer, bytesRead) != bytesRead) {
+        if (write(destFd, buffer, bytesRead) == -1) {
             perror("Error writing to destination file");
             break;
         }

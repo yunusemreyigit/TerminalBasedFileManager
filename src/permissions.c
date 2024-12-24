@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>   // For chmod and mode_t
-#include <sys/types.h>  // For mode_t
 #include "permissions.h"
 
 // Change file or directory permissions
