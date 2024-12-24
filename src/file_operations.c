@@ -9,7 +9,7 @@
 void fcreate(char *fileName) {
     int fd = creat(fileName, 0644);
     if (fd < 0) {
-        perror("Error creating '%s' file", fileName);
+        perror("Error creating file");
     } else {
         printf("File '%s' created successfully.\n", fileName);
         close(fd);
@@ -55,4 +55,21 @@ void fcopy(char *srcFile, char *destFile) {
 
     close(srcFd);
     close(destFd);
+}
+
+//Writes content of desired file
+void see(char *fileName){
+    int bufferSize = 1024;
+    char *buffer;
+    int fd;
+
+    buffer = (char *)malloc(bufferSize*sizeof(char));
+
+    fd = open(fileName, O_RDONLY);
+    if(fd < 0) perror("File could not open");
+
+    
+    while(read(fd, buffer, bufferSize) > 0){
+        write(1, buffer, bufferSize);
+    }
 }

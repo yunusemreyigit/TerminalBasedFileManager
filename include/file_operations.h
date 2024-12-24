@@ -12,4 +12,7 @@ void fdelete(char *fileName);
 // Copy a file
 void fcopy(char *srcFile, char *destFile);
 
+// See the file content
+void see(char *fileName);
+
 #endif // FILE_OPERATIONS_H
