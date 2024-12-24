@@ -6,17 +6,14 @@
 #include "permissions.h"
 #include "logger.h"
 
+/* 
+TODO: It can not delete not empty directory. It must ask if you are sure
+TODO: make dlist function as like ls command
+TODO: search file
+*/
+
 void print_help() {
-    printf("Available commands:\n");
-    printf("  fcreate <filename> - Create a file\n");
-    printf("  fdelete <filename> - Delete a file\n");
-    printf("  fcopy <source> <destination> - Copy a file\n");
-    printf("  dcreate <dirname> - Create a directory\n");
-    printf("  ddelete <dirname> - Delete a directory\n");
-    printf("  dlist <dirname> - List contents of a directory\n");
-    printf("  chmod <path> <mode> - Change permissions\n");
-    printf("  help - Show this help message\n");
-    printf("  exit - Exit the program\n");
+   see("help");
 }
 
 int main() {
@@ -24,9 +21,11 @@ int main() {
     char arg1[128], arg2[128];
     mode_t mode;
 
+    see("banner");
     print_help();
 
     while (1) {
+
         printf("> ");
         fgets(command, sizeof(command), stdin);
         command[strcspn(command, "\n")] = 0; // Remove newline
@@ -49,6 +48,9 @@ int main() {
         } else if (sscanf(command, "dlist %s", arg1) == 1) {
             dlist(arg1);
             log_action("dlist", "Success");
+        } else if (sscanf(command, "see %s", arg1) == 1) {
+            see(arg1);
+            log_action("see", "Success");
         } else if (sscanf(command, "chmod %s %o", arg1, &mode) == 2) {
             change_permissions(arg1, mode);
             log_action("chmod", "Success");

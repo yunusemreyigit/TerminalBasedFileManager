@@ -1,0 +1,20 @@
++ ===================================================================================== +
+| == HELP ==										|
+| Available commands:									|
+|	fcreate 	<filename>		Create a file				|
+|  	fdelete		<filename>		Delete a file				|
+|  	fcopy 		<source> <destination>	Copy a file				|
+|	move		<source> <destination>	Move file				|
+|	see		<filename>		See a file content			|
+|	rename		<source> <destination>	Rename a file				|
+|											|
+|  	dcreate 	<dirname>		Create a directory			|
+|  	ddelete 	<dirname>		Delete a directory			|
+|  	dlist 		<dirname>		List contents of a directory		|
+|											|
+|  	chmod 		<path> <mode>		Change permission			|
+|											|
+|  	help					Show this help message 			|
+|  	exit					Exit the program			|
++ ===================================================================================== +
+

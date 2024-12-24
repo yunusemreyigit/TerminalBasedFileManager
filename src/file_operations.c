@@ -66,10 +66,16 @@ void see(char *fileName){
     buffer = (char *)malloc(bufferSize*sizeof(char));
 
     fd = open(fileName, O_RDONLY);
-    if(fd < 0) perror("File could not open");
-
-    
-    while(read(fd, buffer, bufferSize) > 0){
-        write(1, buffer, bufferSize);
+    if(fd < 0){
+        perror("File could not open");
+        return;
     }
+    
+    while((bufferSize = read(fd, buffer, bufferSize)) > 0){
+        if(write(1, buffer, bufferSize) < 0){
+            perror("File could not shown");
+            break;
+        }
+    }
+    close(fd);
 }
