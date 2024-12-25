@@ -1,4 +1,4 @@
-# Compiler and flags
+
 CC = gcc
 CFLAGS = -Wall -Iinclude -g  # -Iinclude adds the include directory to the search path
 
@@ -18,10 +18,10 @@ all: $(TARGET)
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ)
 
-# Rule to compile each source file into an object file
+#compile each source file into an object file
 %.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean up compiled files
+# Clean up command
 clean:
 	rm -f $(OBJ) $(TARGET)
