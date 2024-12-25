@@ -8,7 +8,7 @@
 
 /* 
 TODO: It can not delete not empty directory. It must ask if you are sure
-TODO: make dlist function as like ls command
+TODO: make dlist function as like ls command - permission
 TODO: search file
 */
 
@@ -45,7 +45,10 @@ int main() {
         } else if (sscanf(command, "ddelete %s", arg1) == 1) {
             ddelete(arg1);
             log_action("ddelete", "Success");
-        } else if (sscanf(command, "dlist %s", arg1) == 1) {
+        } else if (strcmp(command, "dlist") == 0) {
+            dlist(".");
+            log_action("dlist", "Success");
+        }else if (sscanf(command, "dlist %s", arg1) == 1) {
             dlist(arg1);
             log_action("dlist", "Success");
         } else if (sscanf(command, "see %s", arg1) == 1) {
