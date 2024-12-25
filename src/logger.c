@@ -6,7 +6,6 @@
 #include <string.h>
 #include "logger.h"
 
-// Log operations
 void log_action(char *operation, char *result) {
     int logFd = open("file_manager.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (logFd < 0) {
@@ -16,7 +15,7 @@ void log_action(char *operation, char *result) {
 
     time_t now = time(NULL);
     char *timestamp = ctime(&now);
-    timestamp[strlen(timestamp) - 1] = '\0'; // Remove newline character
+    timestamp[strlen(timestamp) - 1] = '\0';
 
     char logEntry[256];
     snprintf(logEntry, sizeof(logEntry), "[%s] Operation: %s, Result: %s\n", timestamp, operation, result);

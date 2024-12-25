@@ -1,27 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "file_operations.h"
 #include "directory_ops.h"
 #include "permissions.h"
-#include "logger.h"
 
 void print_help() {
     printf("Available commands:\n");
-    printf("  fcreate <filename> - Create a file\n");
-    printf("  fdelete <filename> - Delete a file\n");
-    printf("  fcopy <source> <destination> - Copy a file\n");
-    printf("  dcreate <dirname> - Create a directory\n");
-    printf("  ddelete <dirname> - Delete a directory\n");
-    printf("  dlist <dirname> - List contents of a directory\n");
+    printf("  creat <filename> - Create a file\n");
+    printf("  unlink <filename> - Delete a file\n");
+    printf("  opendir <dirname> - Open a directory\n");
+    printf("  readdir - Read contents of the currently opened directory\n");
+    printf("  closedir - Close the currently opened directory\n");
+    printf("  rmdir <dirname> - Delete a directory\n");
     printf("  chmod <path> <mode> - Change permissions\n");
-    printf("  help - Show this help message\n");
+    printf("  stat <filename> - Get file information\n");
+    printf("  open <filename> - Open and edit a file\n");
+    printf("  read <filename> - Read data from a file\n");
+    printf("  write <filename> <data> - Write data to a file\n");
+    printf("  rename <oldname> <newname> - Rename a file or folder\n");
     printf("  exit - Exit the program\n");
 }
 
 int main() {
-    char command[256];
-    char arg1[128], arg2[128];
+    char command[256], arg1[128], arg2[128], arg3[1024];
     mode_t mode;
 
     print_help();
@@ -29,35 +34,36 @@ int main() {
     while (1) {
         printf("> ");
         fgets(command, sizeof(command), stdin);
-        command[strcspn(command, "\n")] = 0; // Remove newline
+        command[strcspn(command, "\n")] = 0;
 
-        if (sscanf(command, "fcreate %s", arg1) == 1) {
-            fcreate(arg1);
-            log_action("fcreate", "Success");
-        } else if (sscanf(command, "fdelete %s", arg1) == 1) {
-            fdelete(arg1);
-            log_action("fdelete", "Success");
-        } else if (sscanf(command, "fcopy %s %s", arg1, arg2) == 2) {
-            fcopy(arg1, arg2);
-            log_action("fcopy", "Success");
-        } else if (sscanf(command, "dcreate %s", arg1) == 1) {
-            dcreate(arg1);
-            log_action("dcreate", "Success");
-        } else if (sscanf(command, "ddelete %s", arg1) == 1) {
-            ddelete(arg1);
-            log_action("ddelete", "Success");
-        } else if (sscanf(command, "dlist %s", arg1) == 1) {
-            dlist(arg1);
-            log_action("dlist", "Success");
+        if (sscanf(command, "creat %s", arg1) == 1) {
+            creat_command(arg1);
+        } else if (sscanf(command, "unlink %s", arg1) == 1) {
+            unlink_command(arg1);
+        } else if (sscanf(command, "opendir %s", arg1) == 1) {
+            opendir_command(arg1);
+        } else if (strcmp(command, "readdir") == 0) {
+            readdir_command();
+        } else if (strcmp(command, "closedir") == 0) {
+            closedir_command();
+        } else if (sscanf(command, "rmdir %s", arg1) == 1) {
+            rmdir_command(arg1);
         } else if (sscanf(command, "chmod %s %o", arg1, &mode) == 2) {
             change_permissions(arg1, mode);
-            log_action("chmod", "Success");
-        } else if (strcmp(command, "help") == 0) {
-            print_help();
+        } else if (sscanf(command, "stat %s", arg1) == 1) {
+            stat_command(arg1);
+        } else if (sscanf(command, "open %s", arg1) == 1) {
+            open_command(arg1);
+        } else if (sscanf(command, "read %s", arg1) == 1) {
+            read_command(arg1);
+        } else if (sscanf(command, "write %s %[^\n]", arg1, arg3) == 2) {
+            write_command(arg1, arg3);
+        } else if (sscanf(command, "rename %s %s", arg1, arg2) == 2) {
+            rename_command(arg1, arg2);
         } else if (strcmp(command, "exit") == 0) {
             break;
         } else {
-            printf("Unknown command. Type 'help' for a list of commands.\n");
+            printf("Unknown command. Type 'help' for available commands.\n");
         }
     }
 
