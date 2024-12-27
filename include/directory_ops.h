@@ -6,5 +6,4 @@ void delete_directory(char *dirName);
 void list_directory(char *dirName);
 void change_directory(char *dirName);
 char *get_current_directory();
-void change_directory(char *dirName);
 #endif // DIRECTORY_OPS_H
