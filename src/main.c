@@ -4,47 +4,45 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 #include "file_operations.h"
 #include "directory_ops.h"
 #include "permissions.h"
-#include "jrb.h"
 
-void print_help() {
-    printf("Available commands:\n");
-    printf("  creat <filename> - Create a file\n");
-    printf("  remove <filename> - Delete a file\n");
-    // printf("  opendir <dirname> - Open a directory\n");
-    // printf("  readdir - Read contents of the currently opened directory\n");
-    // printf("  closedir - Close the currently opened directory\n");
-    // printf("  rmdir <dirname> - Delete a directory\n");
-    printf("  chmod <path> <mode> - Change permissions\n");
-    printf("  stat <filename> - Get file information\n");
-    printf("  open <filename> - Open and edit a file\n");
-    printf("  read <filename> - Read data from a file\n");
-    printf("  write <filename> <data> - Write data to a file\n");
-    printf("  rename <oldname> <newname> - Rename a file or folder\n");
-    printf("  exit - Exit the program\n");
+
+
+void print_help(char *helpDir) {
+    read_command(helpDir);
 }
 
 int main() {
+    // set help directory 
+    char * appDir = get_current_directory();
+    char * helpDir = (char *)malloc(strlen(appDir) + 6);
+
+    helpDir[0] = '\0';
+    strcat(helpDir, appDir);
+    strcat(helpDir, "/help");
+    //
 
     char command[256], arg1[128], arg2[128], arg3[1024];
     mode_t mode;
 
-    print_help();
+    read_command("banner");
+    print_help(helpDir);
 
     while (1) {
         printf("%s > ", get_current_directory());
         fgets(command, sizeof(command), stdin);
         command[strcspn(command, "\n")] = 0;
 
-        if (sscanf(command, "creat %s", arg1) == 1) {
+        if (sscanf(command, "fcreate %s", arg1) == 1) {
             creat_command(arg1);
-        } else if (sscanf(command, "remove %s", arg1) == 1) {
+        } else if (sscanf(command, "fremove %s", arg1) == 1) {
             unlink_command(arg1);
-        } else if (strcmp(command, "list") == 0) {
+        } else if (strcmp(command, "dlist") == 0) {
             list_directory(".");
-        } else if (sscanf(command, "list %s", arg1) == 1) { 
+        } else if (sscanf(command, "dlist %s", arg1) == 1) { 
             list_directory(arg1);
         } else if (sscanf(command, "ddelete %s", arg1) == 1) { 
             delete_directory(arg1);
@@ -58,12 +56,14 @@ int main() {
             stat_command(arg1);
         } else if (sscanf(command, "open %s", arg1) == 1) {
             open_command(arg1);
-        } else if (sscanf(command, "read %s", arg1) == 1) {
+        } else if (sscanf(command, "fread %s", arg1) == 1) {
             read_command(arg1);
-        } else if (sscanf(command, "write %s %[^\n]", arg1, arg3) == 2) {
+        } else if (sscanf(command, "fwrite %s %[^\n]", arg1, arg3) == 2) {
             write_command(arg1, arg3);
         } else if (sscanf(command, "rename %s %s", arg1, arg2) == 2) {
             rename_command(arg1, arg2);
+        } else if (strcmp(command, "help") == 0) {
+            print_help(helpDir);
         } else if (strcmp(command, "exit") == 0) {
             break;
         } else {

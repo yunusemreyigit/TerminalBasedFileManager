@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <time.h>
 #include "file_operations.h"
 
 void creat_command(char *fileName) {
@@ -30,10 +31,16 @@ void stat_command(char *fileName) {
         perror("Error getting file information");
         return;
     }
+
+    // convert st_mtime to readable format
+    struct tm *tm_info = localtime(&fileStat.st_mtime);
+    char timeString[100];
+    strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", tm_info);
+
     printf("File: %s\n", fileName);
     printf("Size: %ld bytes\n", fileStat.st_size);
     printf("Permissions: %o\n", fileStat.st_mode & 0777);
-    printf("Last modified: %ld\n", fileStat.st_mtime);
+    printf("Last modified: %s\n", timeString);
 }
 
 void open_command(char *fileName) {
@@ -71,7 +78,7 @@ void read_command(char *fileName) {
         return;
     }
 
-    char buffer[1024];
+    char buffer[2048];
     ssize_t bytesRead = read(fd, buffer, sizeof(buffer) - 1);
     if (bytesRead < 0) {
         perror("Error reading file");
@@ -80,7 +87,7 @@ void read_command(char *fileName) {
     }
 
     buffer[bytesRead] = '\0';
-    printf("File content:\n%s\n", buffer);
+    printf("%s\n", buffer);
 
     close(fd);
 }
