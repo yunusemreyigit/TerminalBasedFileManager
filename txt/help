@@ -2,8 +2,8 @@
 | == HELP ==										|
 | Available commands:									|
 |	fcreate 	<filename>		Create a file				|
-|  	fremove		<filename>		Delete a file				|
-|  	fcopy 		<source> <destination>	Copy a file				|
+|  	fdelete		<filename>		Delete a file				|
+|  	fcopy 		<source> <destination>	Copy a source file to destination file	|
 |	move		<source> <destination>	Move a file				|
 |	fread		<filename>		See a file content			|
 |	fwrite		<filename> <data>	Write data to a file			|

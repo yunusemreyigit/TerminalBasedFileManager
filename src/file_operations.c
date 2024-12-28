@@ -115,3 +115,40 @@ void rename_command(char *oldName, char *newName) {
         perror("Error renaming file or directory");
     }
 }
+
+void copy_command(char *source, char *destination){
+    int fdSource, fdDest;
+    int bytesRead;
+    
+    fdSource = open(source, O_RDONLY);
+    fdDest = open(destination, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if(fdSource < 0 || fdDest < 0){
+        perror("Error opening file");
+        return;
+    }
+    char buffer[512];
+    
+    while((bytesRead = read(fdSource, buffer, sizeof(buffer))) > 0){
+        if (write(fdDest, buffer, bytesRead) == -1) {
+            perror("Error writing to destination file");
+            break;
+        }
+    }
+    printf("File %s successfully copied to %s\n", source, destination);
+    close(fdSource);
+    close(fdDest);
+}
+
+void move_command(char *oldPath, char* newPath){
+    int fd;
+
+    fd = link(oldPath, newPath);
+    if(fd < 0){
+        perror("File could not moved.");
+    }else{
+        unlink(oldPath);
+        printf("File successfully moved to %s\n", newPath);
+    }
+
+    close(fd);
+}

@@ -47,7 +47,7 @@ int main() {
         if (sscanf(command, "fcreate %s", arg1) == 1) {
             creat_command(arg1);
             log_action(command,"SUCCESS");
-        } else if (sscanf(command, "fremove %s", arg1) == 1) {
+        } else if (sscanf(command, "fdelete %s", arg1) == 1) {
             unlink_command(arg1);
         } else if (strcmp(command, "dlist") == 0) {
             list_directory(".");
@@ -82,6 +82,12 @@ int main() {
             log_action(command,"SUCCESS");
         } else if (sscanf(command, "rename %s %s", arg1, arg2) == 2) {
             rename_command(arg1, arg2);
+            log_action(command,"SUCCESS");
+        } else if (sscanf(command, "fcopy %s %s", arg1, arg2) == 2) {
+            copy_command(arg1, arg2);
+            log_action(command,"SUCCESS");
+        } else if (sscanf(command, "move %s %s", arg1, arg2) == 2) {
+            move_command(arg1, arg2);
             log_action(command,"SUCCESS");
         } else if (strcmp(command, "help") == 0) {
             print_help(helpDir);

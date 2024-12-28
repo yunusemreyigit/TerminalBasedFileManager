@@ -33,3 +33,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 # Clean up compiled files
 clean:
 	rm -f $(OBJDIR)/*.o $(TARGET)
+	rm -f log/file_manager.log
