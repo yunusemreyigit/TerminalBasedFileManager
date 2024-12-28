@@ -6,8 +6,23 @@
 #include <string.h>
 #include "logger.h"
 
+char * logDir;
+
+
+void set_log_directory(char *appDir){
+    if(logDir == NULL){
+    logDir = (char *)malloc(strlen(appDir) + 22);
+    logDir[0] = '\0';
+    }
+
+    strcat(logDir, appDir);
+    strcat(logDir, "/log/file_manager.log");
+}
 void log_action(char *operation, char *result) {
-    int logFd = open("file_manager.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if(logDir == NULL){
+        printf("Please first call set_log_directory method.");
+    }
+    int logFd = open(logDir, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (logFd < 0) {
         perror("Error opening log file");
         return;

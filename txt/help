@@ -8,11 +8,15 @@
 |	fread		<filename>		See a file content			|
 |	fwrite		<filename> <data>	Write data to a file			|
 |	stat		<filename>		Get file information			|
-|	open		<filname>		Open and edit a file			|
+|	open		<filename>		Open and edit a file			|
 |											|
 |  	dcreate 	<dirname>		Create a directory			|
 |  	ddelete 	<dirname>		Delete a directory			|
 |  	dlist 		<dirname>		List contents of a directory		|
+|						/ -> directory				|
+|						@ -> link				|
+|						* -> executable				|
+|											|
 |											|
 |  	chmod 		<path> <mode>		Change permission			|
 |	rename		<source> <destination>	Rename a file or folder			|

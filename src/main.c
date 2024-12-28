@@ -17,19 +17,26 @@ void print_help(char *helpDir) {
 }
 
 int main() {
-    // set help directory 
+    // set static files directories 
     char * appDir = get_current_directory();
-    char * helpDir = (char *)malloc(strlen(appDir) + 6);
+    char * helpDir = (char *)malloc(strlen(appDir) + 10);
+    char * bannerDir = (char *)malloc(strlen(appDir) + 12);
 
     helpDir[0] = '\0';
+    bannerDir[0] = '\0';
+
     strcat(helpDir, appDir);
-    strcat(helpDir, "/help");
+    strcat(helpDir, "/txt/help");
+    strcat(bannerDir, appDir);
+    strcat(bannerDir, "/txt/banner");    
     //
 
     char command[256], arg1[128], arg2[128], arg3[1024];
     mode_t mode;
 
-    read_command("banner");
+    set_log_directory(appDir);
+
+    read_command(bannerDir);
     print_help(helpDir);
 
     while (1) {

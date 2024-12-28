@@ -20,6 +20,7 @@ TARGET = ./bin/file_manager
 
 # Default rule
 all: $(TARGET)
+	mkdir -p log
 
 # Linking object files to create the executable
 $(TARGET): $(OBJ)
