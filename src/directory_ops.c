@@ -7,10 +7,12 @@
 #include "dllist.h"
 #include "directory_ops.h"
 
+char *currentDir;
+
 
 void create_directory(char *dirName){
     int fd;
-    fd = mkdir(dirName, 0644);
+    fd = mkdir(dirName, 0755);
     if(fd < 0){
         perror("Could not created directory!");
     }else{
@@ -35,7 +37,9 @@ void change_directory(char *dirName){
     }  
 }
 char *get_current_directory(){
-    char *currentDir = (char *)malloc(1024 * sizeof(char));
+    if(currentDir == NULL){
+        currentDir = (char *)malloc(1024 * sizeof(char));
+    }
 
     if (getcwd(currentDir, 1024) != NULL) {
         return currentDir;
@@ -43,7 +47,6 @@ char *get_current_directory(){
         perror("get_current_directory is failed!");
     }
 
-    free(currentDir);
     return currentDir;
 }
 // List directory contents
@@ -54,7 +57,6 @@ void list_directory(char *dirName) {
     struct dirent *entry;
 
     Dllist files, tmp;
-    char *fn;
     char *s;
     char *lastSlash;
 
@@ -66,10 +68,9 @@ void list_directory(char *dirName) {
     }
 
     files = new_dllist();
-    s = (char *) malloc(sizeof(char)*(strlen(fn)+258));
+    s = (char *) malloc(sizeof(char)*(strlen(dirName)+258));
 
     while ((entry = readdir(dir)) != NULL) {
-        fn = strdup(entry->d_name);
         sprintf(s, "%s/%s", dirName, entry->d_name);
         dll_append(files, new_jval_s(strdup(s)));
     }
@@ -81,13 +82,13 @@ void list_directory(char *dirName) {
     if (exists < 0) {
         fprintf(stderr, "%s not found\n", tmp->val.s);
     } else if (S_ISDIR(buff.st_mode)) {
-        printf("%lu\t %o\t %d\t %ld\t %s/\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
+        printf("%lu\t %o\t %lu\t %ld\t %s/\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
     } else if (S_ISLNK(buff.st_mode)) {
-        printf("%lu\t %o\t %d\t %ld\t %s@\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
+        printf("%lu\t %o\t %lu\t %ld\t %s@\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
     } else if (buff.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
-        printf("%lu\t %o\t %d\t %ld\t %s*\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
+        printf("%lu\t %o\t %lu\t %ld\t %s*\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
     } else {
-        printf("%lu\t %o\t %d\t %ld\t %s\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
+        printf("%lu\t %o\t %lu\t %ld\t %s\n", buff.st_ino, buff.st_mode & 0777, buff.st_nlink, buff.st_size, lastSlash + 1);
     }
     free(tmp->val.s);
   }

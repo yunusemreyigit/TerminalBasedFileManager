@@ -33,7 +33,7 @@ int main() {
     print_help(helpDir);
 
     while (1) {
-        printf("%s > ", get_current_directory());
+        printf("%s > ", appDir);
         fgets(command, sizeof(command), stdin);
         command[strcspn(command, "\n")] = 0;
 
@@ -56,6 +56,7 @@ int main() {
             log_action(command,"SUCCESS");
         } else if (sscanf(command, "go %s", arg1) == 1) { 
             change_directory(arg1);
+            appDir = get_current_directory();
             log_action(command,"SUCCESS");
         } else if (sscanf(command, "chmod %s %o", arg1, &mode) == 2) {
             change_permissions(arg1, mode);
@@ -79,6 +80,8 @@ int main() {
             print_help(helpDir);
             log_action(command,"SUCCESS");
         } else if (strcmp(command, "exit") == 0) {
+            free(appDir);
+            free(helpDir);
             break;
         } else {
             printf("Unknown command. Type 'help' for available commands.\n");
