@@ -140,15 +140,6 @@ void copy_command(char *source, char *destination){
 }
 
 void move_command(char *oldPath, char* newPath){
-    int fd;
-
-    fd = link(oldPath, newPath);
-    if(fd < 0){
-        perror("File could not moved.");
-    }else{
-        unlink(oldPath);
-        printf("File successfully moved to %s\n", newPath);
-    }
-
-    close(fd);
+    copy_command(oldPath,newPath);
+    unlink_command(oldPath);
 }
